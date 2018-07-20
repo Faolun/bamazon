@@ -29,7 +29,7 @@ function displayGoods() {
     });
 
     for (let i = 0; i < res.length; i++) {
-      table.push([res[i].id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity]);
+      table.push([res[i].id, res[i].product_name, res[i].department_name, (res[i].price).toFixed(2), res[i].stock_quantity]);
     }
 
     console.log(table.toString());

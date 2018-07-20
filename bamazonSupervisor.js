@@ -48,7 +48,7 @@ function viewProductSalesByDept(){
         head: ["Department ID", "Department Name", "Overhead Cost", "Product Sales", "Total Profit"]
       });
       for (let i = 0; i < res.length; i++) {
-        table.push([res[i].depId, res[i].department_name, res[i].overHeadCosts, res[i].totalSales, ((res[i].totalSales - res[i].overHeadCosts).toFixed(2))]);
+        table.push([res[i].depId, res[i].department_name, (res[i].overHeadCosts).toFixed(2), (res[i].totalSales).toFixed(2), ((res[i].totalSales - res[i].overHeadCosts).toFixed(2))]);
       }
       console.log(table.toString());
       console.log(`${splitter}\n`);
