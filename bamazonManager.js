@@ -16,6 +16,12 @@ var connection = mysql.createConnection({
 
 var splitter = `***************************************************************`
 
+console.log(colors.bgBlue.white(`\n************************** [bAmazon] **************************`));
+console.log(colors.bgBlue.white(`       Thanks for scrying the wizard's marketplace.            `));
+console.log(colors.bgBlue.white(`       The only source for all your adventuring needs.         `));
+console.log(colors.bgBlue.white(`${splitter}\n`));
+console.log(colors.yellow.bold(`******************** [MANAGER LEVEL ACCESS] *******************\n`));
+
 function manager(){
   inquirer.prompt([{
     name: "select",
@@ -32,7 +38,7 @@ function manager(){
       break;
       case "Add New Product": addNewProduct();
       break;
-      case "End Session": console.log('Until Next Time!'); 
+      case "End Session": console.log(colors.yellow(`Session Ended. Logging Out.`)); 
       connection.end();
         
     }
@@ -70,7 +76,7 @@ function displayLowInv(){
     for (let i = 0; i < res.length; i++) {
       table.push([res[i].id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity]);
     }
-    console.log(`************** [Viewing Low Inventory] **************`);
+    console.log(colors.yellow(`\n******************** [Viewing Low Inventory] ******************\n`));
     console.log(table.toString());
     console.log(`${splitter}\n`);
 manager();
@@ -89,8 +95,7 @@ function addToInventory(){
     itemArray.push(res[i].product_name);
   };
 
-  
-  console.log(`************** [Adding To Inventory] **************`);
+  console.log(colors.yellow(`\n********************* [Adding To Inventory] *******************\n`));
   inquirer.prompt([{
     name: "product",
     type: "list",
@@ -118,9 +123,9 @@ function addToInventory(){
         {product_name: ans.product}
         ], function(err, res){
           if(err) throw err;
-          console.log(splitter);
-          console.log('The quantity was updated.');
-          console.log(splitter);
+          console.log(colors.yellow(splitter));
+          console.log(colors.yellow('                   The quantity was updated.'));
+          console.log(colors.yellow(splitter));
           manager();
         });
       })
@@ -136,17 +141,12 @@ function addNewProduct(){
       deptNames.push(res[i].department_name);
     }
   });
-  console.log(`************** [Adding New Product] **************`);
+
+  console.log(colors.yellow(`\n********************** [Adding New Product] *******************\n`));
 inquirer.prompt([{
     name: "product",
     type: "input",
     message: "Product Name To Be Added: "
-    // validate: function(value){
-    //   if(isNaN(value) == false) {
-    //     return true;
-    //   }else{
-    //     return false;}
-    // }
   }, {
     name: "department",
     type: "list",

@@ -16,17 +16,17 @@ var connection = mysql.createConnection({
 
 var splitter = `***************************************************************`
 
+console.log(colors.bgBlue.white(`\n************************** [bAmazon] **************************`));
+console.log(colors.bgBlue.white(`       Thanks for scrying the wizard's marketplace.            `));
+console.log(colors.bgBlue.white(`       The only source for all your adventuring needs.         `));
+console.log(colors.bgBlue.white(splitter));
+
 function displayGoods() {
   connection.query("SELECT * FROM products", function (err, res) {
     if (err) throw err;
     var table = new Table({
       head: ["ID", "Item Name", "Department Name", "Cost", "Stock Qty"]
     });
-    console.log(colors.bgCyan.white(`************************** [bAmazon] **************************`));
-    console.log(colors.bgCyan.white(`       Thanks for scrying the wizard's marketplace.            `));
-    console.log(colors.bgCyan.white(`       The only source for all your adventuring needs.         `));
-    console.log(colors.bgCyan.white(splitter));
-
 
     for (let i = 0; i < res.length; i++) {
       table.push([res[i].id, res[i].product_name, res[i].department_name, res[i].price, res[i].stock_quantity]);
@@ -34,7 +34,6 @@ function displayGoods() {
 
     console.log(table.toString());
     console.log(`${splitter}\n`);
-    // connection.end();
 
     inquirer.prompt([{
       name: "itemId",
@@ -63,7 +62,7 @@ function displayGoods() {
       var chosenQty = parseInt(answer.Quantity);
       var orderTotal = parseFloat(res[chosenId].price.toFixed(2) * chosenQty).toFixed(2);
       if (chosenQty <= res[chosenId].stock_quantity) {
-        console.log("Your total for " + "(" + answer.Quantity + ")" + " : " + res[chosenId].product_name + " is: $" + orderTotal);
+        console.log(`Your total for (${answer.Quantity}) : ${res[chosenId].product_name} is: $${orderTotal}`);
         inquirer.prompt([{
           name: "reply",
           type: "confirm",
@@ -78,8 +77,7 @@ function displayGoods() {
               console.log(`A most wise purchace. Thank you.\nYour order will arrive by courier within 3 days.`);
 
             });
-            //////TEST ZONE///////
-              //to update database with extra data
+
             connection.query("SELECT * FROM departments", function(err, deptRes){
               if(err) throw err;
               var index;
@@ -88,8 +86,6 @@ function displayGoods() {
                   index = i;
                 }
               }
-              
-              //updates totalSales in departments table
               connection.query("UPDATE departments SET ? WHERE ?", [
               {totalSales: deptRes[index].totalSales + orderTotal},
               {department_name: res[chosenId].department_name}
@@ -98,8 +94,6 @@ function displayGoods() {
                   followUp();
               });
             });
-
-            /////////////////////
           } else {
             console.log("As you wish...")
             followUp();

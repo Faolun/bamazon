@@ -16,25 +16,32 @@ var connection = mysql.createConnection({
 
 var splitter = `***************************************************************`
 
+console.log(colors.bgBlue.white(`\n************************** [bAmazon] **************************`));
+console.log(colors.bgBlue.white(`       Thanks for scrying the wizard's marketplace.            `));
+console.log(colors.bgBlue.white(`       The only source for all your adventuring needs.         `));
+console.log(colors.bgBlue.white(`${splitter}\n`));
+console.log(colors.red.bold(`****************** [SUPERVISOR LEVEL ACCESS] *****************\n`));
+
 function supervisor(){
   inquirer.prompt([{
     type: "list",
     name: "select",
-    message: "Supervisor Menu",
+    message: "Supervisor Level Functions Menu",
     choices: ["View Product Sales by Department", "Create New Department", "End Session"]
   }]).then(function(ans){
     switch(ans.select){
-      case "View Product Sales by Department": viewProductByDept();
+      case "View Product Sales by Department": viewProductSalesByDept();
       break;
       case "Create New Department": createNewDept();
       break;
-      case "End Session": console.log('Bye!');
+      case "End Session": console.log(colors.red('Session Ended. Logging Out.'));
       connection.end();
     }
   });
 }
 
-function viewProductByDept(){
+function viewProductSalesByDept(){
+    console.log(colors.red.bold(`\n**************** [Product Sales By Department] ***************\n`));
   connection.query('SELECT * FROM departments', function(err, res){
     if(err) throw err;
     var table = new Table({
@@ -50,8 +57,8 @@ function viewProductByDept(){
 }
   //create a new department
   function createNewDept(){
-    console.log('>>>>>>Creating New Department<<<<<<');
-    //prompts to add deptName and numbers. if no value is then by default = 0
+    console.log(colors.red.bold(`\n****************** [Creating New Department] *****************\n`));
+
     inquirer.prompt([
     {
       type: "input",
@@ -60,7 +67,7 @@ function viewProductByDept(){
     }, {
       type: "input",
       name: "overHeadCost",
-      message: "Over Head Cost: ",
+      message: "Department Over Head Cost: ",
       default: 0,
       validate: function(val){
         if(isNaN(val) === false){return true;}
@@ -69,7 +76,7 @@ function viewProductByDept(){
     }, {
       type: "input",
       name: "prodSales",
-      message: "Product Sales: ",
+      message: "Current Product Sales: ",
       default: 0,
       validate: function(val){
         if(isNaN(val) === false){return true;}
@@ -83,10 +90,12 @@ function viewProductByDept(){
         totalSales: ans.prodSales
       }, function(err, res){
         if(err) throw err;
-        console.log('Another department was added.');
-      })
-      supervisor();
-    });
+        console.log(colors.red(splitter));
+        console.log(colors.red(`                        Department Added`));
+        console.log(colors.red(splitter));
+        supervisor();
+    })
+     });
   }
 
 supervisor();
