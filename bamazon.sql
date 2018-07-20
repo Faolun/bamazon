@@ -32,7 +32,6 @@ VALUES
 ("Longsword", "Weapons", 15.50, 4), 
 ("Halbred", "Weapons", 20.00, 1);
 
--- experiment zone
 
 CREATE TABLE departments(
     depId TINYINT AUTO_INCREMENT NOT NULL,

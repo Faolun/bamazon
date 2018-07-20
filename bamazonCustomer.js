@@ -95,7 +95,6 @@ function displayGoods() {
               {department_name: res[chosenId].department_name}
               ], function(err, deptRes){
                   if(err) throw err;
-                  console.log("Updated Dept Sales.");
                   followUp();
               });
             });

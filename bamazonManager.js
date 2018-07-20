@@ -20,7 +20,7 @@ function manager(){
   inquirer.prompt([{
     name: "select",
     type: "list",
-    message: "Function Menu Selection",
+    message: "Manager Level Functions Menu",
     choices: ["View Products for Sale", "View Low Inventory", "Add to Inventory", "Add New Product","End Session"]
   }]).then(function(ans){
      switch(ans.select){
@@ -88,6 +88,7 @@ function addToInventory(){
   for(var i=0; i<res.length; i++){
     itemArray.push(res[i].product_name);
   };
+
   
   console.log(`************** [Adding To Inventory] **************`);
   inquirer.prompt([{
