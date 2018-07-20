@@ -74,7 +74,10 @@ function displayGoods() {
             }, {
               id: res[chosenId].id
             }], function (err, res) {
-              console.log(`A most wise purchace. Thank you.\nYour order will arrive by courier within 3 days.`);
+              console.log(`\n${splitter}`);
+              console.log(`               A most wise purchace. Thank you.`);
+              console.log(`         Your order will arrive by courier within 3 days.`);
+              console.log(`${splitter}\n`);
 
             });
 
