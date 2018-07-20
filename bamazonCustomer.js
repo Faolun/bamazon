@@ -60,10 +60,10 @@ function displayGoods() {
       }
     }]).then(function (answer) {
       var chosenId = answer.itemId - 1;
-      var chosenProduct = res[chosenId]
-      var chosenQty = answer.Quantity
+      var chosenQty = parseInt(answer.Quantity);
+      var orderTotal = parseFloat(res[chosenId].price.toFixed(2) * chosenQty).toFixed(2);
       if (chosenQty <= res[chosenId].stock_quantity) {
-        console.log("Your total for " + "(" + answer.Quantity + ")" + " : " + res[chosenId].product_name + " is: " + res[chosenId].price.toFixed(2) * chosenQty);
+        console.log("Your total for " + "(" + answer.Quantity + ")" + " : " + res[chosenId].product_name + " is: $" + orderTotal);
         inquirer.prompt([{
           name: "reply",
           type: "confirm",
@@ -75,9 +75,32 @@ function displayGoods() {
             }, {
               id: res[chosenId].id
             }], function (err, res) {
-              console.log("A most wise purchace. Thank you.")
-              followUp();
+              console.log(`A most wise purchace. Thank you.\nYour order will arrive by courier within 3 days.`);
+
             });
+            //////TEST ZONE///////
+              //to update database with extra data
+            connection.query("SELECT * FROM departments", function(err, deptRes){
+              if(err) throw err;
+              var index;
+              for(var i = 0; i < deptRes.length; i++){
+                if(deptRes[i].department_name === res[chosenId].department_name){
+                  index = i;
+                }
+              }
+              
+              //updates totalSales in departments table
+              connection.query("UPDATE departments SET ? WHERE ?", [
+              {totalSales: deptRes[index].totalSales + orderTotal},
+              {department_name: res[chosenId].department_name}
+              ], function(err, deptRes){
+                  if(err) throw err;
+                  console.log("Updated Dept Sales.");
+                  followUp();
+              });
+            });
+
+            /////////////////////
           } else {
             console.log("As you wish...")
             followUp();
